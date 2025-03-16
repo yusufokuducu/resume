@@ -16,17 +16,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Cache TeXLive
-        id: cache-texlive
-        uses: actions/cache@v3
-        with:
-          path: /usr/share/texlive
-          key: ${{ runner.os }}-texlive-${{ hashFiles('**/resume.tex') }}
-          restore-keys: |
-            ${{ runner.os }}-texlive-
-
       - name: Install TeXLive
-        if: steps.cache-texlive.outputs.cache-hit != 'true'
         run: |
           sudo apt-get update
           sudo apt-get install -y texlive-latex-extra texlive-fonts-recommended
