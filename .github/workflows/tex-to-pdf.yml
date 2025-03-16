@@ -1,0 +1,32 @@
+name: Tex to PDF
+run-name: ${{ github.workflow }}
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install TeXLive
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y texlive-latex-extra texlive-fonts-recommended
+
+      - name: Compile LaTeX to PDF
+        run: |
+          pdflatex resume.tex
+
+      - name: Commit and push PDF
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add resume.pdf
+          git commit -m "docs: update resume.pdf" || echo "No changes to commit"
+          git push
